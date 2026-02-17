@@ -1,0 +1,373 @@
+Perfeito. 👏
+Antes de escrever uma linha de código, você está fazendo a coisa certa: **definir jornada + experiência + requisitos claros**.
+
+Vou estruturar isso como se fosse um mini-documento de produto (nível startup profissional).
+
+---
+
+# 🧠 VISÃO DO PRODUTO
+
+**Nome provisório:** (ex: NutriAI)
+
+## 🎯 Objetivo
+
+Ser um **nutricionista digital com IA**, que:
+
+* Faz anamnese inteligente
+* Cria plano alimentar personalizado
+* Acompanha alimentação diária
+* Calcula calorias automaticamente
+* Ajusta metas (perda, ganho, manutenção)
+* Dá suporte humano opcional
+
+Mas principalmente:
+
+> Ser simples, acolhedor e fluido — não parecer um app de controle rígido.
+
+---
+
+# 👤 JORNADA DO USUÁRIO
+
+Vamos dividir em fases.
+
+---
+
+# 1️⃣ Primeira Experiência (Onboarding)
+
+### 🎯 Objetivo:
+
+Fazer o usuário se sentir:
+
+* ouvido
+* acolhido
+* seguro
+* não julgado
+
+### 🔄 Fluxo ideal:
+
+1. Tela de boas-vindas
+   “Olá 👋 Eu vou te ajudar a organizar sua alimentação.”
+
+2. Pergunta simples:
+
+   > “Qual é o seu objetivo?”
+
+   * Perder peso
+   * Ganhar massa
+   * Manter peso
+   * Melhorar saúde
+
+3. Início da anamnese conversacional
+
+---
+
+# 2️⃣ Anamnese com IA (Modo Conversa)
+
+### 🎯 Deve parecer conversa, não formulário.
+
+Em vez de 20 campos de formulário:
+👉 usar chat interativo estilo WhatsApp.
+
+Exemplo:
+
+IA:
+
+> Quantos anos você tem?
+
+Usuário responde.
+
+IA:
+
+> Qual seu peso atual?
+
+IA:
+
+> Qual sua altura?
+
+IA:
+
+> Você pratica atividade física? Quantas vezes por semana?
+
+IA:
+
+> Tem alguma restrição alimentar?
+
+IA:
+
+> Como é um dia típico de alimentação seu?
+
+---
+
+### 📊 Dados coletados:
+
+* Idade
+* Peso
+* Altura
+* Sexo
+* Objetivo
+* Frequência de atividade
+* Restrições
+* Preferências
+
+---
+
+# 3️⃣ Processamento Inteligente
+
+Após anamnese:
+
+* Calcular BMI
+* Calcular TMB (taxa metabólica basal)
+* Calcular gasto calórico estimado
+* Definir meta diária de calorias
+* Definir divisão macro (carb, proteína, gordura)
+
+---
+
+# 4️⃣ Entrega do Plano Alimentar
+
+### 📋 Tela clara e simples:
+
+“Seu plano sugerido”
+
+* Meta diária de calorias
+* Sugestão de refeições (café, almoço, jantar, lanche)
+* Alternativas por refeição
+
+Botões:
+
+* ✔️ Aceitar plano
+* 🔄 Ajustar preferências
+* 💬 Falar com nutricionista
+
+---
+
+# 5️⃣ Registro Diário (Core do App)
+
+Aqui é onde o app vive.
+
+### 🎯 Objetivo:
+
+Registrar sem fricção.
+
+Botão principal flutuante:
+➕ “Registrar refeição”
+
+Ao clicar:
+Modal com 3 opções:
+
+* 📷 Foto
+* 🎤 Áudio
+* ⌨️ Texto
+
+---
+
+## 📷 Foto
+
+Usuário tira foto do prato
+IA:
+
+* identifica alimentos
+* estima porção
+* calcula calorias
+
+Usuário confirma:
+✔️ Confirmar
+✏️ Ajustar
+
+---
+
+## 🎤 Áudio
+
+Usuário fala:
+
+> “Comi arroz, feijão e frango grelhado.”
+
+IA transcreve e calcula.
+
+---
+
+## ⌨️ Texto
+
+Input rápido:
+
+> “2 fatias pizza + coca”
+
+---
+
+# 6️⃣ Feedback em Tempo Real
+
+Após registrar:
+
+Mostrar popup leve:
+
+“Você consumiu 620 kcal.”
+
+Barra de progresso do dia:
+
+🟢 1350 / 2000 kcal
+
+Se ultrapassar:
+Mensagem acolhedora:
+
+> Tudo bem ❤️ vamos ajustar o restante do dia.
+
+Nunca julgamento.
+
+---
+
+# 7️⃣ Atividade Física
+
+Botão rápido:
+🏃 “Registrar atividade”
+
+Pode ser:
+
+* Texto rápido
+* Lista de atividades comuns
+* Integração futura com smartwatch
+
+IA ajusta saldo calórico.
+
+---
+
+# 8️⃣ Revisão do Plano
+
+Usuário pode:
+
+* Solicitar nova versão do plano
+* Informar que está com fome demais
+* Informar que não gostou das opções
+* Solicitar variação
+
+IA responde adaptando.
+
+---
+
+# 9️⃣ Suporte Humano (Premium)
+
+Chat dentro do app:
+
+💬 “Falar com nutricionista”
+
+Pode ser:
+
+* Chat humano
+* Ou IA com modo especialista
+
+---
+
+# 🔟 Dashboard do Usuário
+
+Tela principal deve mostrar:
+
+* Meta do dia
+* Calorias consumidas
+* Atividade registrada
+* Peso atual
+* Progresso semanal
+* Humor (opcional)
+
+Visual simples e motivador.
+
+---
+
+# 🎨 EXPERIÊNCIA (UX PRINCIPAL)
+
+O app deve ser:
+
+* Simples
+* Conversacional
+* Não técnico
+* Não cheio de números
+* Visual leve
+* Acolhedor
+
+Evitar:
+❌ excesso de gráficos técnicos
+❌ termos médicos
+❌ telas pesadas
+
+---
+
+# 📌 REQUISITOS FUNCIONAIS
+
+## Essenciais (MVP)
+
+* Login
+* Anamnese conversacional
+* Cálculo BMI + meta calórica
+* Plano alimentar automático
+* Registro via texto
+* Registro via foto (mesmo que simplificado)
+* Cálculo calórico diário
+* Barra de progresso
+* Histórico simples
+
+---
+
+## Fase 2
+
+* Registro por áudio
+* Revisão automática do plano
+* Chat com nutricionista
+* Integração com smartwatch
+* Notificações inteligentes
+
+---
+
+# 📊 Estrutura Técnica Básica
+
+Você já tem:
+
+* Backend IA
+* AWS
+* Autenticação
+
+O app vai precisar:
+
+* Upload de imagem
+* Envio de áudio
+* Armazenar histórico
+* Modelo de alimentos/calorias
+
+---
+
+# ⚠️ Ponto Muito Importante
+
+Esse tipo de app mexe com:
+
+* Autoestima
+* Corpo
+* Alimentação
+* Ansiedade
+
+Então UX precisa ser:
+
+* Gentil
+* Não julgadora
+* Motivadora
+
+---
+
+# 🔥 Pergunta estratégica
+
+Você quer que o app seja:
+
+1. 🤖 100% IA (autoatendimento)
+2. 👩‍⚕️ IA + humano opcional
+3. 🧠 Mais técnico (para atletas)
+4. 💚 Mais emocional (bem-estar)
+
+A resposta muda completamente a experiência.
+
+---
+
+Se você quiser, agora posso:
+
+* 📐 Transformar isso num PRD formal
+* 📊 Criar backlog detalhado (MVP)
+* 🗺 Criar mapa de telas
+* 🎨 Definir fluxo exato tela por tela
+* 🚀 Ou montar versão 1.0 enxuta para lançar em 60 dias
+
+Qual você quer fazer agora?

@@ -1,0 +1,324 @@
+Perfeito. Vamos montar o **Mapa de Telas da V1.0** com:
+
+* Estrutura clara
+* Fluxo simples
+* Foco em experiência acolhedora
+* Pronto para virar backlog técnico depois
+
+Vou organizar em:
+
+1️⃣ Arquitetura de navegação
+2️⃣ Fluxo completo do usuário
+3️⃣ Descrição detalhada de cada tela
+4️⃣ Estados importantes (edge cases)
+5️⃣ Mapa visual simplificado
+
+---
+
+# 🧭 1️⃣ ARQUITETURA DE NAVEGAÇÃO
+
+### Estrutura principal
+
+```
+Auth Stack
+ └── Login
+
+Onboarding Stack
+ ├── Welcome
+ ├── Conversa (chat anamnese)
+ ├── Resultado (BMI + meta)
+ └── Plano Inicial
+
+Main App (Bottom Tabs)
+ ├── Home
+ ├── Histórico
+ ├── Registrar (FAB / Modal)
+ ├── Plano
+ └── Perfil
+```
+
+---
+
+# 🔄 2️⃣ FLUXO COMPLETO DO USUÁRIO
+
+## Primeira vez:
+
+Login
+→ Welcome
+→ Anamnese Conversacional
+→ Resultado
+→ Plano Inicial
+→ Home
+
+---
+
+## Uso diário:
+
+Home
+→ Registrar Refeição
+→ Feedback
+→ Atualização da barra
+→ Histórico
+
+---
+
+## Ajuste de plano:
+
+Plano
+→ Solicitar revisão
+→ Novo plano
+
+---
+
+# 🧱 3️⃣ DESCRIÇÃO DETALHADA DAS TELAS
+
+---
+
+## 🔹 1. Login
+
+Objetivo:
+
+* Acesso simples
+
+Conteúdo:
+
+* Logo
+* Email
+* Senha
+* Entrar
+* Criar conta
+
+Sem complexidade.
+
+---
+
+## 🔹 2. Welcome
+
+Texto:
+
+> “Eu vou te ajudar a organizar sua alimentação de forma simples.”
+
+Botão:
+→ Começar
+
+---
+
+## 🔹 3. Anamnese Conversacional
+
+Layout estilo chat:
+
+IA:
+
+> Qual é seu objetivo?
+
+Usuário escolhe botão.
+
+IA:
+
+> Qual sua idade?
+
+Input simples.
+
+Perguntas:
+
+* Idade
+* Peso
+* Altura
+* Sexo
+* Frequência atividade
+* Restrição alimentar
+
+Sem parecer formulário.
+
+Barra de progresso discreta no topo.
+
+---
+
+## 🔹 4. Resultado
+
+Mostrar:
+
+* BMI
+* Meta diária calórica
+* Texto amigável:
+
+> “Com base no que você me contou…”
+
+Botão:
+→ Ver plano
+
+---
+
+## 🔹 5. Plano Inicial
+
+Tela clara:
+
+Café da manhã
+Almoço
+Jantar
+Lanches
+
+Botões:
+
+* Aceitar plano
+* Trocar sugestões
+
+---
+
+# 🔹 6. Home (Tela principal)
+
+Aqui é onde o usuário passa 80% do tempo.
+
+Conteúdo:
+
+* Saudação:
+
+  > “Bom dia, João 👋”
+
+* Meta do dia:
+  1.350 / 2.000 kcal
+  (barra de progresso)
+
+* Botão flutuante grande:
+  ➕ Registrar
+
+* Pequeno resumo:
+
+  * Atividade física hoje?
+  * Peso atual
+
+---
+
+# 🔹 7. Registrar Refeição (Modal / Bottom Sheet)
+
+Ao clicar no botão:
+
+Opções:
+
+📷 Foto
+🎤 Áudio (se entrar na 1.0, pode ser texto apenas)
+⌨️ Texto
+
+Depois que envia:
+
+Tela de confirmação:
+
+* Itens detectados
+* Calorias estimadas
+* Botão Confirmar
+* Botão Ajustar
+
+---
+
+# 🔹 8. Feedback Popup
+
+Após confirmar:
+
+Pequeno popup leve:
+
+> Você consumiu 620 kcal
+> Restam 1.380 kcal hoje
+
+Duração curta, elegante.
+
+---
+
+# 🔹 9. Histórico
+
+Lista por dia:
+
+* Data
+* Total de calorias
+* Refeições registradas
+
+Ao clicar em um dia:
+
+* Detalhes
+
+---
+
+# 🔹 10. Plano
+
+Mostrar plano atual.
+
+Botão:
+🔄 Revisar plano
+
+IA pergunta:
+
+> Quer mudar algo?
+
+---
+
+# 🔹 11. Perfil
+
+* Foto
+* Nome
+* Peso atual
+* Meta
+* Logout
+
+---
+
+# ⚠️ 4️⃣ ESTADOS IMPORTANTES
+
+Você precisa desenhar também:
+
+### 🔸 Estado Offline
+
+* Banner discreto
+* Permitir registro offline
+* Sincronizar depois
+
+### 🔸 Estado Excedeu Meta
+
+Mensagem acolhedora.
+
+### 🔸 Não registrou nada no dia
+
+Mensagem motivacional:
+
+> Que tal registrar sua primeira refeição hoje?
+
+---
+
+# 🗺 5️⃣ MAPA VISUAL SIMPLIFICADO
+
+```
+LOGIN
+  ↓
+WELCOME
+  ↓
+ANAMNESE (CHAT)
+  ↓
+RESULTADO
+  ↓
+PLANO INICIAL
+  ↓
+HOME
+  ├── Registrar (modal)
+  ├── Histórico
+  ├── Plano
+  └── Perfil
+```
+
+---
+
+# 🎯 Essência da V1.0
+
+Tela principal simples.
+Registro rápido.
+Feedback humano.
+Plano adaptável.
+Nada complexo.
+
+---
+
+Se você quiser, agora podemos:
+
+* 📐 Criar wireframe textual tela por tela
+* 📋 Transformar em backlog técnico (épicos e tasks)
+* 🧠 Criar prompt estruturado para IA da anamnese
+* 🏗 Definir arquitetura backend mínima
+
+Qual você quer fazer agora?

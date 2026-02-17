@@ -1,0 +1,165 @@
+{
+  "created_at": "2026-02-17T01:49:58Z",
+  "messages": [
+    {
+      "role": "assistant",
+      "text": "Qual seu nome?"
+    },
+    {
+      "role": "user",
+      "text": "agnei"
+    },
+    {
+      "role": "assistant",
+      "text": "Qual sua idade (anos)?"
+    },
+    {
+      "role": "user",
+      "text": "33"
+    },
+    {
+      "role": "assistant",
+      "text": "Altura (em cm)? Ex: 175"
+    },
+    {
+      "role": "user",
+      "text": "185"
+    },
+    {
+      "role": "assistant",
+      "text": "Peso (em kg)? Ex: 82.5"
+    },
+    {
+      "role": "user",
+      "text": "100"
+    },
+    {
+      "role": "assistant",
+      "text": "Qual seu principal objetivo agora? (ex: emagrecer, ganhar massa, performance, saúde)"
+    },
+    {
+      "role": "user",
+      "text": "emagrecer e definir, ganho de massa"
+    },
+    {
+      "role": "assistant",
+      "text": "Você tem um prazo/meta de data? (ex: 3 meses, até julho) (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "até dezembro"
+    },
+    {
+      "role": "assistant",
+      "text": "Qual o motivo mais forte por trás desse objetivo? (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "me sentir bem, forte e disposto"
+    },
+    {
+      "role": "assistant",
+      "text": "Como é sua rotina de trabalho/estudo? (ex: escritório, home office, turnos, etc.)"
+    },
+    {
+      "role": "user",
+      "text": "correria pura, em casa, trabalho, faculdade"
+    },
+    {
+      "role": "assistant",
+      "text": "Em média, quantos passos por dia? (se não souber, '-')"
+    },
+    {
+      "role": "user",
+      "text": "2500"
+    },
+    {
+      "role": "assistant",
+      "text": "Quanto de água por dia (litros)? Ex: 2.0 (ou '-')"
+    },
+    {
+      "role": "user",
+      "text": "2.5"
+    },
+    {
+      "role": "assistant",
+      "text": "Quantas refeições por dia você costuma fazer? (ou '-')"
+    },
+    {
+      "role": "user",
+      "text": "5"
+    },
+    {
+      "role": "assistant",
+      "text": "Você tem restrições alimentares? (alergias, religião, preferência, etc.) (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "não"
+    },
+    {
+      "role": "assistant",
+      "text": "Possui alguma condição de saúde? (ex: hipertensão, diabetes, gastrite) (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "não"
+    },
+    {
+      "role": "assistant",
+      "text": "Usa medicamentos? Quais? (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "não"
+    },
+    {
+      "role": "assistant",
+      "text": "Fez exames recentes? Quais? (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "sim"
+    },
+    {
+      "role": "assistant",
+      "text": "Que tipo de treino? (musculação, corrida, cross, etc.)"
+    },
+    {
+      "role": "user",
+      "text": "musculação"
+    },
+    {
+      "role": "assistant",
+      "text": "Quantos dias por semana?"
+    },
+    {
+      "role": "user",
+      "text": "5"
+    },
+    {
+      "role": "assistant",
+      "text": "Em média, quantas horas você dorme por noite? (ex: 7.5 ou '-')"
+    },
+    {
+      "role": "user",
+      "text": "6"
+    },
+    {
+      "role": "assistant",
+      "text": "Quais suplementos e doses? (ex: creatina 3g/dia)"
+    },
+    {
+      "role": "user",
+      "text": "creatina 5g, whey 30gm, ferro, d3"
+    },
+    {
+      "role": "assistant",
+      "text": "Mais alguma observação importante? (dores, limitações, preferências, etc.) (pode '-' )"
+    },
+    {
+      "role": "user",
+      "text": "não"
+    }
+  ]
+}

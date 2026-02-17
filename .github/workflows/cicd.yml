@@ -1,0 +1,103 @@
+name: nutriai-backend-cicd
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "**"
+
+env:
+  AWS_REGION: us-east-1
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    env:
+      TF_VAR_gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build Lambda zip
+        run: |
+          chmod +x backend/scripts/build_zip.sh
+          ./backend/scripts/build_zip.sh
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform fmt check
+        working-directory: infra/envs/dev
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: infra/envs/dev
+        run: terraform init
+
+      - name: Terraform validate
+        working-directory: infra/envs/dev
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: infra/envs/dev
+        run: terraform plan -out=tfplan
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    env:
+      TF_VAR_gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build Lambda zip
+        run: |
+          chmod +x backend/scripts/build_zip.sh
+          ./backend/scripts/build_zip.sh
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform init
+        working-directory: infra/envs/dev
+        run: terraform init
+
+      - name: Terraform apply
+        working-directory: infra/envs/dev
+        run: terraform apply -auto-approve
+
+      - name: Print outputs
+        working-directory: infra/envs/dev
+        run: terraform output

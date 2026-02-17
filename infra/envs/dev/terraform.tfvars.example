@@ -1,0 +1,6 @@
+aws_region    = "us-east-1"
+project_prefix = "nutriai"
+environment   = "dev"
+auth_enabled  = false
+gemini_model  = "gemini-2.5-flash-lite"
+# gemini_api_key é fornecida por TF_VAR_gemini_api_key no CI (GitHub Secret)

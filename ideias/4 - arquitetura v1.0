@@ -1,0 +1,531 @@
+Beleza — vamos **voltar pro simples** e ainda assim deixar “pronto pra crescer” sem refazer tudo depois.
+
+A V1 agora é só:
+
+✅ **um backend serverless** com **1 API de LLM** para conduzir uma **anamnese leve (chat)**
+✅ salva o mínimo do estado da conversa
+✅ no fim calcula BMI (determinístico) e devolve um resumo básico
+
+Sem filas, sem workers, sem S3, sem Transcribe, sem multimodal, sem plano alimentar ainda.
+
+---
+
+# Arquitetura V1 (simples)
+
+## Componentes AWS
+
+1. **API Gateway HTTP API**
+2. **Lambda (FastAPI)** — 1 função (monolito pequeno)
+3. **DynamoDB** — 1 tabela para estado da anamnese
+4. **Provider LLM** (externo) — Gemini Flash-Lite (ou outro) chamado via HTTPS
+5. **CloudWatch Logs**
+
+**Sem VPC/NAT** (Lambda fora de VPC tem internet por padrão).
+
+---
+
+# Fluxo do usuário (V1)
+
+1. App chama `POST /v1/anamnese/start`
+2. Backend cria uma sessão e devolve a **primeira pergunta**
+3. App envia resposta → `POST /v1/anamnese/answer`
+4. Backend salva a resposta e devolve a **próxima pergunta**
+5. Quando terminar, backend devolve:
+
+   * respostas estruturadas
+   * BMI calculado
+   * (opcional) meta bem simples (ex.: “objetivo: perder peso”)
+
+---
+
+# API (mínima)
+
+## 1) Start
+
+`POST /v1/anamnese/start`
+**Request**
+
+```json
+{ "language": "pt-BR" }
+```
+
+**Response**
+
+```json
+{
+  "session_id": "uuid",
+  "message": "Olá! Vamos começar. Qual é seu objetivo? (perder peso / ganhar massa / manter)",
+  "step": 1,
+  "done": false
+}
+```
+
+## 2) Answer
+
+`POST /v1/anamnese/answer`
+**Request**
+
+```json
+{
+  "session_id": "uuid",
+  "answer": "perder peso"
+}
+```
+
+**Response (continuando)**
+
+```json
+{
+  "session_id": "uuid",
+  "message": "Qual sua idade?",
+  "step": 2,
+  "done": false
+}
+```
+
+**Response (final)**
+
+```json
+{
+  "session_id": "uuid",
+  "done": true,
+  "profile": {
+    "goal": "perder peso",
+    "age": 34,
+    "weight_kg": 82,
+    "height_cm": 175,
+    "activity_level": "3x/semana"
+  },
+  "bmi": 26.78,
+  "bmi_category": "Sobrepeso (aprox.)",
+  "summary": "Obrigado! Com base nas suas respostas, seu IMC é 26,78..."
+}
+```
+
+---
+
+# Perguntas (curtas e fixas)
+
+Nada de IA inventando questionário infinito.
+
+**Fluxo fixo (5–7 passos):**
+
+1. objetivo
+2. idade
+3. sexo (opcional)
+4. peso
+5. altura
+6. atividade física (leve)
+7. restrições (opcional)
+
+✅ Isso já dá base para BMI e contexto.
+
+---
+
+# Onde entra o LLM então?
+
+Só para deixar a conversa “humana” e normalizar respostas.
+
+### Responsabilidades do LLM (V1)
+
+* Reformular a pergunta de forma acolhedora
+* Interpretar resposta livre do usuário e **extrair valor**
+
+  * exemplo: “tenho 1,75” → height_cm=175
+* Decidir se a resposta é válida ou pedir clarificação
+* Gerar a próxima mensagem (mas o “próximo campo” é controlado pelo backend)
+
+### O que o backend controla (sempre)
+
+* qual campo estamos coletando (state machine)
+* validação forte (idade numérica, peso/altura range)
+* cálculo do BMI (sem LLM)
+
+---
+
+# DynamoDB (uma tabela só)
+
+Tabela: `anamnese_sessions`
+
+Chaves:
+
+* **PK:** `SESSION#<session_id>`
+* **SK:** `STATE`
+
+Atributos:
+
+* `user_sub` (do JWT, se você já tiver auth)
+* `tenant_id`
+* `step` (int)
+* `data` (map: goal, age, weight_kg, height_cm, activity_level, restrictions)
+* `created_at`, `updated_at`
+* `ttl` (expirar sessão em 7 dias)
+
+✅ Simples e barato.
+
+---
+
+# Segurança (simples também)
+
+* Se você já tem seu Auth Service:
+
+  * validar JWT no backend
+  * usar `sub` e `tenant_id`
+* Se ainda não quer login agora:
+
+  * pode deixar sem auth no dev, mas colocar feature flag
+  * produção: **exigir JWT**
+
+---
+
+# Escalabilidade (sem adicionar complexidade)
+
+Mesmo simples, isso já escala porque:
+
+* API Gateway + Lambda
+* DynamoDB on-demand
+* LLM call por request (limitar)
+
+---
+
+# Controle de custo (para LLM não explodir)
+
+Na V1, aplique 4 regras:
+
+1. **1 chamada LLM por resposta** (sem retry infinito)
+2. **output curto** (max tokens pequeno)
+3. **usar modelo barato por padrão** (Flash-Lite)
+4. **limite de perguntas por sessão** (ex.: 10)
+
+---
+
+# Estrutura do backend (repo)
+
+* `backend/` FastAPI
+* `infra/` Terraform (API Gateway + Lambda + DynamoDB + Secrets)
+* `config/` (LLM API key via Secrets Manager / env var no Lambda)
+
+---
+
+# O que fica explícito “para crescer depois”
+
+Sem implementar agora, mas já planejado:
+
+* `POST /v1/plan/generate` (placeholder)
+* `POST /v1/meals/log` (placeholder)
+* `jobs` (placeholder)
+  Mas nada disso entra na V1.
+
+---
+
+Se você quiser, eu te mando em seguida:
+
+* um **prompt fechado pro Copilot** gerar esse backend V1 (FastAPI + DynamoDB + Terraform + CI/CD)
+* e um **contrato OpenAPI** pronto
+
+Quer que eu gere o prompt do Copilot já com os endpoints e a state machine?
+
+
+
+Você é um engenheiro sênior DevOps + Backend (Python/FastAPI) especialista em AWS Serverless e Terraform.
+Vou começar um repositório VAZIO. Crie APENAS o backend + infraestrutura + CI/CD, e faça 100% do deploy na AWS (dev). 
+Depois disso, crie um fluxo de testes (via curl + script) para eu validar a API antes de integrar no app mobile.
+
+RESTRIÇÕES IMPORTANTES:
+- Nada de frontend.
+- Nada de VPC/NAT.
+- Tudo serverless e barato: API Gateway HTTP API + Lambda + DynamoDB + CloudWatch Logs.
+- Autenticação: inicialmente DESABILITADA por padrão (para testar rápido). Mas o código deve suportar habilitar JWT depois via env var.
+- LLM provider: Gemini 2.5 Flash-Lite como default (chamado via HTTPS). A key deve ficar em Secrets Manager ou GitHub Secret injetada via Terraform.
+- Implementar state machine FIXA de anamnese (não deixar o LLM decidir o fluxo). O LLM só ajuda a normalizar/validar resposta e criar uma mensagem amigável.
+- Criar TTL nas sessões (7 dias).
+- Criar documentação “for dummies” com comandos do zero até produção.
+- Criar GitHub Actions com OIDC (role-to-assume via env ROLE_TO_ASSUME). NÃO fazer terraform import no CI.
+- Region default: us-east-1.
+
+========================================================
+1) ESTRUTURA DO REPO (OBRIGATÓRIA)
+========================================================
+/
+  README.md
+  .gitignore
+  .github/workflows/cicd.yml
+
+  backend/
+    README.md
+    requirements.txt
+    src/
+      app/
+        main.py
+        config.py
+        routes/
+          health.py
+          anamnese.py
+        services/
+          llm_gemini.py
+          anamnese_flow.py
+          bmi.py
+          ddb.py
+        models/
+          api.py
+          domain.py
+        middleware/
+          auth.py
+      lambda_handler.py
+    scripts/
+      run_local.sh
+      test_api.sh
+
+  infra/
+    README.md
+    bootstrap/
+      main.tf
+      versions.tf
+      providers.tf
+      outputs.tf
+      variables.tf
+    envs/dev/
+      main.tf
+      versions.tf
+      providers.tf
+      variables.tf
+      outputs.tf
+      backend.tf
+      terraform.tfvars.example
+    modules/
+      ddb/
+      lambda/
+      apigw_http/
+      iam/
+      logs/
+
+========================================================
+2) FUNCIONALIDADE BACKEND (OBRIGATÓRIA)
+========================================================
+2.1 Endpoints
+- GET /health
+  Response: { "ok": true, "service": "nutriai-anamnese", "env": "dev" }
+
+- POST /v1/anamnese/start
+  Request: { "language": "pt-BR" } (optional)
+  Response:
+    {
+      "session_id": "<uuid>",
+      "step": 1,
+      "done": false,
+      "message": "<primeira pergunta>"
+    }
+
+- POST /v1/anamnese/answer
+  Request:
+    { "session_id": "<uuid>", "answer": "<string>" }
+  Response (next question):
+    {
+      "session_id": "<uuid>",
+      "step": <int>,
+      "done": false,
+      "message": "<próxima pergunta>"
+    }
+  Response (final):
+    {
+      "session_id": "<uuid>",
+      "done": true,
+      "profile": {
+        "goal": "...",
+        "age": 0,
+        "sex": "male|female|other|unknown",
+        "weight_kg": 0.0,
+        "height_cm": 0.0,
+        "activity_level": "sedentary|light|moderate|high",
+        "restrictions": ["..."]
+      },
+      "bmi": 0.0,
+      "bmi_category": "...",
+      "summary": "..."
+    }
+
+2.2 State machine FIXA (anamnese_flow.py)
+Perguntas/steps (fixos):
+1) goal (perder peso / ganhar massa / manter)
+2) age (int)
+3) sex (male/female/other/unknown) (permitir pular)
+4) weight_kg (float, range 20-300)
+5) height_cm (float, range 80-250)
+6) activity_level (sedentary/light/moderate/high)
+7) restrictions (string livre -> lista; pode ser vazio)
+Após step 7: finalizar.
+
+2.3 Uso do LLM (Gemini Flash-Lite) – só para normalização
+Para cada answer:
+- enviar ao LLM:
+  - qual campo está sendo respondido (ex: "weight_kg")
+  - a resposta do usuário
+  - instruções para retornar JSON estrito:
+    { "value": <normalized>, "is_valid": true|false, "reason": "...", "followup_question": "..." }
+- Se LLM retornar inválido:
+  - NÃO avançar step
+  - responder com followup_question (ou uma mensagem padrão) pedindo para repetir
+- Se LLM retornar válido:
+  - backend valida range e tipo
+  - salva no DynamoDB
+  - avança step e devolve a próxima pergunta (mensagem amigável pode ser gerada pelo backend, não precisa do LLM para isso)
+
+IMPORTANTE:
+- Se LLM falhar (timeout/erro), usar fallback determinístico:
+  - tentar parse simples (regex/números)
+  - se não der, pedir para o usuário responder no formato esperado
+- Limitar tokens (output curto) e timeout HTTP (ex: 8s)
+
+2.4 BMI (bmi.py)
+- bmi = weight_kg / (height_m^2)
+- bmi_category (aproximado):
+  <18.5: "Abaixo do peso"
+  18.5-24.9: "Normal"
+  25-29.9: "Sobrepeso"
+  >=30: "Obesidade"
+
+2.5 DynamoDB (ddb.py)
+Tabela: nutriai_anamnese_sessions_dev
+- PK (string): SESSION#<session_id>
+Atributos:
+- session_id
+- step (int)
+- data (map)
+- created_at, updated_at (ISO)
+- ttl (epoch seconds) = now + 7 days
+- status: ACTIVE|DONE
+Implementar funções:
+- create_session()
+- get_session(session_id)
+- update_session(session_id, patch)
+- mark_done()
+
+2.6 Auth (middleware/auth.py)
+Implementar feature flag via env:
+- AUTH_ENABLED=false (default)
+Se true:
+- exigir Authorization Bearer JWT
+- (por agora) apenas validar presença e formato; deixar TODO claro para validação real com JWKS
+- extrair user_sub e tenant_id se existirem (opcional)
+Se false:
+- permitir anônimo para testes
+
+========================================================
+3) INFRA AWS (TERRAFORM) (OBRIGATÓRIA)
+========================================================
+3.1 Bootstrap
+- S3 bucket para tfstate
+- DynamoDB table para lock
+
+3.2 Dev env (infra/envs/dev)
+Criar:
+- DynamoDB table (PAY_PER_REQUEST)
+- IAM role Lambda + policy mínimo (logs + dynamodb + secretsmanager:GetSecretValue)
+- Lambda function (Python 3.11) empacotada como ZIP
+- API Gateway HTTP API:
+  - integração Lambda proxy
+  - rotas:
+    GET /health
+    POST /v1/anamnese/start
+    POST /v1/anamnese/answer
+  - CORS: permitir * apenas em dev (documentar); em prod restringir
+- CloudWatch log group com retention 14 dias
+- Secrets Manager secret: GEMINI_API_KEY (valor vindo do terraform var)
+Outputs:
+- api_base_url
+- dynamodb_table_name
+- lambda_function_name
+- secret_arn
+
+3.3 Empacotamento do Lambda
+Criar backend/scripts/build_zip.sh:
+- criar venv temporário ou instalar deps em folder build/
+- zip com src/app + dependencies
+- gerar backend/dist/lambda.zip
+Terraform deve apontar para esse zip via path (local_file) e usar source_code_hash.
+
+========================================================
+4) CI/CD (GITHUB ACTIONS) (OBRIGATÓRIA)
+========================================================
+Criar .github/workflows/cicd.yml com jobs:
+A) terraform-plan (PR e push)
+- checkout
+- setup terraform 1.7.5
+- configure aws credentials via OIDC
+- terraform fmt -check
+- terraform init (envs/dev)
+- terraform validate
+- terraform plan
+
+B) deploy (push main)
+- checkout
+- setup python 3.11
+- build lambda zip (bash script)
+- setup terraform
+- configure aws credentials via OIDC (ROLE_TO_ASSUME via env)
+- terraform init
+- terraform apply -auto-approve
+- imprimir outputs no log
+
+Variáveis de ambiente do workflow:
+- AWS_REGION=us-east-1
+- ROLE_TO_ASSUME=<usar env do repo>
+- TF_VAR_gemini_api_key vindo de GitHub Secret: GEMINI_API_KEY
+NÃO commitar secrets.
+
+========================================================
+5) FLUXO DE TESTE (ANTES DO APP) (OBRIGATÓRIO)
+========================================================
+Criar backend/scripts/test_api.sh que:
+1) lê API_BASE_URL por argumento (ou variável)
+2) testa /health
+3) chama /v1/anamnese/start e captura session_id
+4) executa uma sequência completa de respostas (feliz) e imprime o resultado final
+Exemplo de respostas:
+- goal="perder peso"
+- age="34"
+- sex="masculino"
+- weight="82"
+- height="175"
+- activity="moderada"
+- restrictions="sem carne de porco"
+O script deve usar curl + jq (se jq não existir, orientar no README instalar via choco ou usar parse simples).
+Também criar backend/scripts/run_local.sh para rodar local com uvicorn.
+
+========================================================
+6) DOCUMENTAÇÃO “FOR DUMMIES” (OBRIGATÓRIA)
+========================================================
+README.md (raiz) com:
+- Pré-requisitos (AWS CLI configurado, Terraform, Git)
+- Passo a passo:
+  1) git clone
+  2) configurar GitHub Secrets: GEMINI_API_KEY
+  3) bootstrap terraform (infra/bootstrap)
+  4) deploy dev via GitHub Actions (push main) OU manual (terraform apply)
+  5) pegar api_base_url (terraform output)
+  6) rodar teste: ./backend/scripts/test_api.sh <api_base_url>
+
+infra/README.md explicando bootstrap + env dev
+backend/README.md explicando endpoints + exemplos curl
+
+========================================================
+7) QUALIDADE E SEGURANÇA (MÍNIMO)
+========================================================
+- Pydantic models para requests/responses
+- Tratamento de erros consistente (HTTP 400 para input inválido, 500 para falhas internas)
+- Logs sem vazar dados sensíveis (não logar api key, nem payload completo)
+- Timeouts HTTP para LLM
+- Retries: no máximo 1 retry para LLM e somente em erro transitório
+
+========================================================
+8) CRITÉRIOS DE ACEITE
+========================================================
+- Repositório vazio vira um backend completo
+- Deploy dev 100% automatizado (Terraform + GitHub Actions OIDC)
+- DynamoDB + API + Lambda funcionando
+- test_api.sh executa a jornada completa e retorna BMI + summary
+- Sem VPC/NAT
+- Sem frontend
+- Documentação clara para leigos
+
+Implemente tudo diretamente no repositório vazio. Não faça perguntas. Não sugira alternativas.

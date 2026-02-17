@@ -1,0 +1,291 @@
+Perfeito. Vamos montar uma **Versão 1.0 – Minimum Lovable Product (MLP)** que você consegue lançar em **60 dias**, com foco em:
+
+* Simples
+* Funcional
+* Encantador
+* Sem complexidade desnecessária
+* Validável no mercado
+
+Não é MVP técnico.
+É **MLP: mínimo + amável + vendável**.
+
+---
+
+# 🎯 VISÃO DA VERSÃO 1.0
+
+> Um nutricionista conversacional com IA que cria plano alimentar personalizado e acompanha calorias de forma simples e acolhedora.
+
+Sem:
+
+* Integração com smartwatch
+* Chat humano
+* Reconhecimento avançado de imagem com visão computacional pesada
+* Macros complexos
+* Dashboard super técnico
+
+---
+
+# 🧱 ESTRUTURA DA VERSÃO 1.0
+
+## 🔹 Módulo 1 – Onboarding Conversacional
+
+### Objetivo:
+
+Coletar dados mínimos para personalização.
+
+### Perguntas obrigatórias:
+
+* Nome
+* Idade
+* Peso
+* Altura
+* Sexo
+* Objetivo (perder, ganhar, manter)
+* Frequência de atividade física
+* Restrições alimentares
+
+### Cálculos:
+
+* BMI
+* TMB (Mifflin-St Jeor)
+* Gasto estimado
+* Meta calórica diária
+
+Entrega:
+
+* Mensagem personalizada:
+
+  > “Sua meta diária é 2.150 kcal. Vamos construir isso juntos.”
+
+---
+
+## 🔹 Módulo 2 – Plano Alimentar Inicial
+
+### Simples:
+
+* 3 refeições principais + 2 lanches
+* Lista de sugestões
+* Alternativas (1 por refeição)
+
+Botões:
+
+* ✔️ Aceitar plano
+* 🔄 Trocar sugestões
+
+Sem macros detalhados por enquanto.
+
+---
+
+## 🔹 Módulo 3 – Registro de Refeições
+
+Botão principal:
+➕ “Registrar”
+
+Opções:
+
+* Texto (principal)
+* Foto (simplificada)
+
+### Como será feito na 1.0:
+
+* Foto → enviada para IA → usuário confirma alimentos
+* Texto → IA interpreta
+
+Sem reconhecimento de porção extremamente preciso.
+Usar estimativa simples.
+
+---
+
+## 🔹 Módulo 4 – Controle Diário
+
+Tela Home:
+
+Mostrar:
+
+* Meta do dia
+* Calorias consumidas
+* Barra de progresso
+* Histórico do dia
+
+Se ultrapassar:
+Mensagem acolhedora:
+
+> “Hoje passou um pouco, tudo bem ❤️ amanhã ajustamos.”
+
+---
+
+## 🔹 Módulo 5 – Ajuste Inteligente
+
+Após 7 dias:
+IA pergunta:
+
+> “Quer revisar seu plano?”
+
+Permitir:
+
+* Ajustar meta
+* Ajustar preferências
+
+---
+
+# 💛 DIFERENCIAL “LOVABLE”
+
+Aqui está o que transforma de MVP em MLP:
+
+### 1️⃣ Linguagem acolhedora
+
+Nada de:
+❌ “Você excedeu 500 kcal.”
+
+Sim:
+
+> “Você está um pouco acima hoje. Quer ajuda para equilibrar o restante do dia?”
+
+---
+
+### 2️⃣ Microinterações
+
+* Popup suave após registrar refeição
+* Feedback animado quando bater meta
+* Emoji leve
+
+---
+
+### 3️⃣ Simplicidade absurda
+
+Sem:
+
+* 15 gráficos
+* 8 menus
+* 20 métricas
+
+Só o essencial.
+
+---
+
+# 📱 MAPA DE TELAS (1.0)
+
+1. Splash
+2. Login
+3. Onboarding Conversa
+4. Plano inicial
+5. Home (dashboard simples)
+6. Registrar refeição (modal)
+7. Histórico diário
+8. Settings
+
+Total: 8 telas.
+
+---
+
+# 🧠 IA NA 1.0
+
+IA será usada para:
+
+* Conduzir anamnese
+* Gerar plano alimentar
+* Interpretar texto/foto
+* Gerar feedback diário
+
+Não precisa:
+
+* Modelo próprio
+* Treino customizado
+
+Pode usar:
+
+* LLM + prompt estruturado
+* Tabela simples de calorias
+
+---
+
+# 🗓 ROADMAP 60 DIAS
+
+## 🔹 Dias 1–10
+
+* Finalizar design UX
+* Estrutura mobile pronta
+* Tela de onboarding
+
+## 🔹 Dias 11–20
+
+* Backend IA anamnese
+* Cálculo BMI/TMB
+* Geração de plano
+
+## 🔹 Dias 21–35
+
+* Registro de refeições
+* Cálculo calórico
+* Barra de progresso
+
+## 🔹 Dias 36–45
+
+* Histórico diário
+* Ajuste de plano
+* Polimento visual
+
+## 🔹 Dias 46–55
+
+* Testes reais (10–20 pessoas)
+* Ajustes de linguagem
+* Correção de bugs
+
+## 🔹 Dias 56–60
+
+* Preparar publicação
+* Landing page simples
+* Submeter para lojas
+
+---
+
+# 📊 O QUE FICA PARA 2.0
+
+* Chat com nutricionista
+* IA multimodal avançada
+* Macros detalhados
+* Integração smartwatch
+* Comunidade
+* Gamificação
+
+---
+
+# 💰 Estratégia de Monetização Inicial
+
+Modelo simples:
+
+* Gratuito com limite diário de registros
+* Plano premium:
+
+  * Registros ilimitados
+  * Ajustes ilimitados
+  * Histórico completo
+
+---
+
+# ⚠️ RISCO PRINCIPAL
+
+Não é tecnologia.
+É:
+
+* Aderência do usuário.
+* Engajamento diário.
+
+Por isso, foco em:
+👉 Facilidade.
+👉 Emoção.
+👉 Zero fricção.
+
+---
+
+# 🎯 Próximo passo estratégico
+
+Podemos agora:
+
+1️⃣ Criar PRD técnico detalhado
+2️⃣ Criar backlog de tarefas (épicos + stories)
+3️⃣ Definir arquitetura backend IA
+4️⃣ Criar fluxo exato de telas (wireframe textual)
+5️⃣ Criar prompts da IA (parte mais crítica)
+
+Qual você quer fazer primeiro?

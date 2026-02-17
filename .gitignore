@@ -1,42 +1,26 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
 
-# dependencies
-node_modules/
+# Backend build artifacts
+backend/build/
+backend/dist/*.zip
 
-# Expo
-.expo/
-dist/
-web-build/
-expo-env.d.ts
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.*
 
-# Native
-.kotlin/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-
-# Metro
-.metro-health-check*
-
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macOS
+# IDE / OS
+.vscode/
 .DS_Store
-*.pem
+Thumbs.db
 
-# local env files
-.env*.local
+# Local envs/secrets
 .env
-
-# typescript
-*.tsbuildinfo
-
-# generated native folders
-/ios
-/android
+.env.*
