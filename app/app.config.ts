@@ -3,7 +3,7 @@ import type { ExpoConfig, ConfigContext } from 'expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => {
   const appName = process.env.APP_NAME?.trim() || 'TurboTemplate';
-  const apiUrl = process.env.API_URL?.trim() || 'https://example.com';
+  const apiUrl = process.env.API_URL?.trim() || 'https://7tewq45bpd.execute-api.us-east-1.amazonaws.com';
 
   return {
     ...config,

@@ -180,7 +180,7 @@ export function AnamneseChatScreen() {
 
       {offlineNotice ? (
         <Card>
-          <Text style={styles.offlineTitle}>Sem internet. Conecte-se para continuar.</Text>
+          <Text style={styles.offlineTitle}>{offlineNotice}</Text>
           <PrimaryButton title="Tentar novamente" onPress={() => void initializeChat()} />
         </Card>
       ) : null}

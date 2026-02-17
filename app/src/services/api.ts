@@ -54,7 +54,13 @@ export class ApiError extends Error {
 const DEFAULT_TIMEOUT_MS = 10000;
 
 function resolveBaseUrl(apiUrl?: string): string {
-  return (apiUrl ?? ENV.API_URL).replace(/\/$/, '');
+  const baseUrl = (apiUrl ?? ENV.API_URL).trim().replace(/\/$/, '');
+
+  if (!baseUrl || baseUrl.includes('example.com')) {
+    throw new ApiError('API_URL não configurada. Defina uma URL válida da sua API no app.config.ts/.env e reinicie o Expo.');
+  }
+
+  return baseUrl;
 }
 
 async function requestJson<T>(
@@ -110,7 +116,7 @@ async function requestJson<T>(
       throw new ApiError('A conexão demorou demais. Tente novamente em instantes.');
     }
 
-    throw new ApiError('Não foi possível conectar na API. Verifique sua internet e tente de novo.');
+    throw new ApiError('Não foi possível conectar com o servidor da anamnese. Verifique a API_URL e sua conexão e tente de novo.');
   } finally {
     clearTimeout(timeout);
   }
