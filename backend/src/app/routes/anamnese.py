@@ -4,7 +4,21 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.models.api import AnswerRequest, FinalResponse, NextQuestionResponse, StartRequest, StartResponse
+from app.models.api import (
+    AnswerRequest,
+    FinalAnamnesePayload,
+    FinalPayloadGoals,
+    FinalPayloadHealth,
+    FinalPayloadPreferences,
+    FinalPayloadProfile,
+    FinalPayloadRestrictions,
+    FinalPayloadRoutine,
+    FinalPayloadTraining,
+    FinalResponse,
+    NextQuestionResponse,
+    StartRequest,
+    StartResponse,
+)
 from app.models.domain import Profile
 from app.services.anamnese_flow import (
     deterministic_normalize,
@@ -20,6 +34,58 @@ from app.services.llm_gemini import GeminiClient
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/v1/anamnese", tags=["anamnese"])
 llm = GeminiClient()
+
+
+def _build_anamnese_payload(profile: Profile, data: dict) -> FinalAnamnesePayload:
+    return FinalAnamnesePayload(
+        profile=FinalPayloadProfile(
+            sex=profile.sex,
+            age=profile.age,
+            height_cm=profile.height_cm,
+            weight_kg=profile.weight_kg,
+            weight_change_kg=None,
+            weight_change_period_weeks=None,
+        ),
+        goals=FinalPayloadGoals(
+            primary=profile.goal,
+            secondary=None,
+            priority=None,
+            horizon=None,
+        ),
+        routine=FinalPayloadRoutine(
+            work_activity_level=profile.activity_level,
+            sleep_times=None,
+            meals_per_day=None,
+        ),
+        training=FinalPayloadTraining(
+            has_training=None,
+            modalities=[],
+            frequency=None,
+            duration=None,
+            intensity=None,
+            goal=None,
+        ),
+        restrictions=FinalPayloadRestrictions(
+            dietary_patterns=[],
+            allergies=[],
+            forbidden_foods=[],
+            legacy_restrictions=list(profile.restrictions or data.get("restrictions", [])),
+        ),
+        preferences=FinalPayloadPreferences(
+            cooking=None,
+            budget=None,
+            context=[],
+        ),
+        health=FinalPayloadHealth(
+            conditions=[],
+            meds=[],
+            sleep_score=None,
+            hunger_score=None,
+            energy_score=None,
+            water_level=None,
+        ),
+        notes=None,
+    )
 
 
 def _validate_field_range(field: str, value):
@@ -120,6 +186,7 @@ def answer(req: AnswerRequest) -> NextQuestionResponse | FinalResponse:
             bmi=bmi_value,
             bmi_category=category,
             summary=summary,
+            anamnese_payload=_build_anamnese_payload(profile=profile, data=current_data),
         )
 
     except HTTPException:

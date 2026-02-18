@@ -23,6 +23,56 @@ export type AnamneseProfile = {
   restrictions: string[];
 };
 
+export type AnamnesePayload = {
+  profile: {
+    sex?: 'male' | 'female' | 'other' | 'unknown';
+    age?: number;
+    height_cm?: number;
+    weight_kg?: number;
+    weight_change_kg?: number;
+    weight_change_period_weeks?: number;
+  };
+  goals: {
+    primary?: string;
+    secondary?: string;
+    priority?: string;
+    horizon?: string;
+  };
+  routine: {
+    work_activity_level?: 'sedentary' | 'light' | 'moderate' | 'high';
+    sleep_times?: string;
+    meals_per_day?: number;
+  };
+  training: {
+    has_training?: boolean;
+    modalities: string[];
+    frequency?: string;
+    duration?: string;
+    intensity?: number;
+    goal?: string;
+  };
+  restrictions: {
+    dietary_patterns: string[];
+    allergies: string[];
+    forbidden_foods: string[];
+    legacy_restrictions: string[];
+  };
+  preferences: {
+    cooking?: string;
+    budget?: string;
+    context: string[];
+  };
+  health: {
+    conditions: string[];
+    meds: string[];
+    sleep_score?: number;
+    hunger_score?: number;
+    energy_score?: number;
+    water_level?: string;
+  };
+  notes?: string;
+};
+
 export type AnamneseDoneResponse = {
   session_id: string;
   done: true;
@@ -30,6 +80,7 @@ export type AnamneseDoneResponse = {
   bmi: number;
   bmi_category: string;
   summary: string;
+  anamnese_payload?: AnamnesePayload;
 };
 
 export type AnamneseNextResponse = {
